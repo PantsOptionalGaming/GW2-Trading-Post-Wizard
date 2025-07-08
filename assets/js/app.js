@@ -1,55 +1,52 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const tableBody = document.getElementById("profits-body");
-  const status = document.getElementById("status");
+const SHEET_URL =
+  "https://script.google.com/macros/s/AKfycbxU4ks-i_jhldboVik3ruG9spBfOzlcOEbKEFuRGwjapJS4I7wvG-Ng0ugv5FHK9sg/exec";
 
-  const API_URL = "https://script.google.com/macros/s/AKfycbxU4ks-i_jhldboVik3ruG9spBfOzlcOEbKEFuRGwjapJS4I7wvG-Ng0ugv5FHK9sg/exec";
+async function loadCraftingProfits() {
+  try {
+    const res = await fetch(SHEET_URL + "?sheet=CraftingProfits");
+    const data = await res.json();
 
-  async function loadCraftingProfits() {
-    try {
-      status.innerText = "Loading data...";
-      const res = await fetch(`${API_URL}?sheet=CraftingProfits`);
-      const data = await res.json();
+    const body = document.getElementById("crafting-body");
+    if (!body) throw new Error("crafting-body element not found.");
 
-      if (!data || !Array.isArray(data) || data.length === 0) {
-        status.innerText = "⚠️ No data found.";
-        return;
-      }
+    // Clear any existing rows
+    body.innerHTML = "";
 
-      // Remove header row
-      const rows = data.slice(1);
+    // Sort by profit descending
+    data.sort((a, b) => b.Profit - a.Profit);
 
-      rows.forEach(row => {
-        const [recipeID, recipeName, recipeIngredients, ingredientNamesQty, ingredientCost, profit] = row;
+    const topItems = data.slice(0, 10); // show top 10
 
-        const tr = document.createElement("tr");
-        tr.classList.add("hover:bg-gray-800");
+    topItems.forEach((row) => {
+      const tr = document.createElement("tr");
+      tr.classList.add("hover:bg-gray-700");
 
-        tr.innerHTML = `
-          <td class="border border-gray-600 px-2 py-1 text-sm text-white">${recipeID}</td>
-          <td class="border border-gray-600 px-2 py-1 text-sm text-yellow-400">${recipeName}</td>
-          <td class="border border-gray-600 px-2 py-1 text-sm text-gray-300">${recipeIngredients}</td>
-          <td class="border border-gray-600 px-2 py-1 text-sm text-gray-300">${ingredientNamesQty}</td>
-          <td class="border border-gray-600 px-2 py-1 text-sm text-blue-300">${formatCopper(ingredientCost)}</td>
-          <td class="border border-gray-600 px-2 py-1 text-sm font-bold text-green-400">${formatCopper(profit)}</td>
-        `;
+      tr.innerHTML = `
+        <td class="p-2">${row.RecipeName || "N/A"}</td>
+        <td class="p-2">${row["IngredientNames(Qty)"] || "N/A"}</td>
+        <td class="p-2">${formatCopper(row.IngredientCost)}</td>
+        <td class="p-2 text-green-400 font-semibold">${formatCopper(row.Profit)}</td>
+      `;
 
-        tableBody.appendChild(tr);
-      });
+      body.appendChild(tr);
+    });
 
-      status.innerText = `✅ Loaded ${rows.length} crafting profits.`;
-    } catch (err) {
-      console.error("Error fetching data:", err);
-      status.innerText = "❌ Failed to load data.";
+    const timestamp = document.getElementById("last-updated");
+    if (timestamp) {
+      timestamp.innerText =
+        "Last updated: " + new Date().toLocaleString();
     }
+  } catch (err) {
+    console.error("Error fetching data:", err);
   }
+}
 
-  function formatCopper(copper) {
-    const gold = Math.floor(copper / 10000);
-    const silver = Math.floor((copper % 10000) / 100);
-    const remainingCopper = copper % 100;
+function formatCopper(value) {
+  if (isNaN(value)) return "—";
+  const gold = Math.floor(value / 10000);
+  const silver = Math.floor((value % 10000) / 100);
+  const copper = value % 100;
+  return `${gold}g ${silver}s ${copper}c`;
+}
 
-    return `${gold}g ${silver}s ${remainingCopper}c`;
-  }
-
-  loadCraftingProfits();
-});
+document.addEventListener("DOMContentLoaded", loadCraftingProfits);
