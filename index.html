@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-900 text-white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GW2 Trading Post Baron</title>
+  <link href="assets/css/tailwind.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/tabletop@1.6.0/src/tabletop.js"></script>
+</head>
+<body class="p-4 font-sans">
+
+  <header class="text-center mb-6">
+    <h1 class="text-4xl font-bold text-yellow-400">GW2 Trading Post Baron</h1>
+    <p class="text-yellow-600 text-lg">Become a master of the market</p>
+  </header>
+
+  <section class="bg-gray-800 p-4 rounded-xl shadow mb-6">
+    <h2 class="text-2xl text-yellow-400 mb-2">📌 Disclaimer</h2>
+    <p class="text-yellow-600">This tool uses live data from the Google Sheet maintained by the user. All market decisions are your own responsibility.</p>
+  </section>
+
+  <section class="bg-gray-800 p-4 rounded-xl shadow mb-6">
+    <h2 class="text-2xl text-yellow-400 mb-4">💰 Most Profitable Items</h2>
+    <div class="overflow-x-auto">
+      <table class="table-auto w-full text-left text-sm">
+        <thead class="text-yellow-500">
+          <tr>
+            <th class="px-2 py-1">Type</th>
+            <th class="px-2 py-1">Item ID</th>
+            <th class="px-2 py-1">Item Name</th>
+            <th class="px-2 py-1">Profit</th>
+            <th class="px-2 py-1">Method</th>
+            <th class="px-2 py-1">Updated</th>
+          </tr>
+        </thead>
+        <tbody id="mostProfitableTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="text-center text-sm text-yellow-600 mt-12">
+    Powered by Pants Optional Gaming | Inspired by POG-WvW-Builds
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
