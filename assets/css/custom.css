@@ -1,0 +1,45 @@
+/* ==== Custom POG-Themed Overrides ==== */
+
+body {
+  @apply bg-gray-900 text-white font-sans;
+}
+
+h1, h2, h3 {
+  @apply text-yellow-400 font-bold;
+}
+
+button {
+  @apply bg-blue-400 text-black font-semibold px-4 py-2 rounded hover:bg-blue-500 transition;
+}
+
+table {
+  @apply w-full text-left border-collapse border border-gray-700;
+}
+
+th {
+  @apply bg-gray-800 text-yellow-300 px-2 py-2 border border-gray-700 text-sm;
+}
+
+td {
+  @apply px-2 py-2 text-sm border border-gray-700;
+}
+
+input, select {
+  @apply bg-gray-800 text-white border border-gray-600 rounded px-2 py-1;
+}
+
+.status-message {
+  @apply text-sm italic text-gray-400 mt-2;
+}
+
+/* Scrollbar Styling (Optional for cleaner dark theme look) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+  background-color: #222;
+}
