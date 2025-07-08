@@ -1,16 +1,17 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>GW2 Trading Post Baron</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ Tailwind via CDN (no 404s) -->
+  <!-- ✅ Tailwind CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- ✅ Include DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-900 text-white min-h-screen p-4 font-sans">
+<body class="bg-gray-900 text-white min-h-screen p-6 font-sans">
 
-  <!-- 🌟 Main Title -->
+  <!-- 🌟 Header -->
   <header class="text-center mb-8">
     <h1 class="text-4xl font-bold text-yellow-400 mb-2">GW2 Trading Post Baron</h1>
     <p class="text-yellow-300">Profit from the market like a true Tyrian overlord</p>
@@ -18,10 +19,7 @@
 
   <!-- ⚠️ Disclaimer -->
   <div class="bg-yellow-800 text-yellow-200 p-4 rounded mb-6 text-sm max-w-2xl mx-auto">
-    <p>
-      This tool helps identify profitable items to craft and flip using live data from the Trading Post.
-      All values are estimates and prices fluctuate.
-    </p>
+    <p>This tool helps identify profitable items to craft and flip using live data from the Trading Post. Prices fluctuate rapidly. Use with caution.</p>
   </div>
 
   <!-- 📊 Status -->
@@ -29,31 +27,86 @@
     <p id="crafting-status" class="text-blue-300 font-semibold">Loading crafting profits...</p>
   </div>
 
-  <!-- 📦 Profits Table -->
+  <!-- 🔍 Search/Filters -->
+  <div class="max-w-6xl mx-auto mb-4">
+    <input id="tableSearch" type="text" placeholder="Search by name..." class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600">
+  </div>
+
+  <!-- 📦 Crafting Profits Table -->
   <div class="overflow-x-auto max-w-6xl mx-auto">
-    <table class="table-auto w-full text-left border-collapse border border-gray-700">
-      <thead>
-        <tr class="bg-gray-800 text-yellow-300">
-          <th class="p-2 border border-gray-700">RecipeID</th>
-          <th class="p-2 border border-gray-700">Recipe Name</th>
-          <th class="p-2 border border-gray-700">Recipe Ingredients</th>
-          <th class="p-2 border border-gray-700">Ingredient Names (Qty)</th>
-          <th class="p-2 border border-gray-700">Ingredient Cost</th>
-          <th class="p-2 border border-gray-700">Profit</th>
+    <table id="profitsTable" class="display w-full text-sm">
+      <thead class="bg-gray-800 text-yellow-300">
+        <tr>
+          <th>Recipe ID</th>
+          <th>Recipe Name</th>
+          <th>Recipe Ingredients</th>
+          <th>Ingredient Names (Qty)</th>
+          <th>Ingredient Cost</th>
+          <th>Profit</th>
         </tr>
       </thead>
-      <tbody id="crafting-body" class="text-sm text-gray-100">
-        <!-- JS will populate rows here -->
+      <tbody id="crafting-body" class="text-gray-100">
+        <!-- Rows inserted by JS -->
       </tbody>
     </table>
   </div>
 
   <!-- 📘 Footer -->
   <footer class="text-center mt-10 text-xs text-gray-500">
-    Built by POG | Data via GW2 API | Not affiliated with ArenaNet
+    Built with ❤️ by POG | Data via GW2 API | Not affiliated with ArenaNet
   </footer>
 
-  <!-- 🚀 App Script -->
-  <script src="assets/js/app.js"></script>
+  <!-- ✅ jQuery & DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+  <!-- ✅ Load and render profits -->
+  <script>
+    const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxU4ks-i_jhldboVik3ruG9spBfOzlcOEbKEFuRGwjapJS4I7wvG-Ng0ugv5FHK9sg/exec';
+
+    async function loadCraftingProfits() {
+      try {
+        const res = await fetch(SHEET_API_URL);
+        const data = await res.json();
+
+        const profits = data?.CraftingProfits || [];
+
+        const tbody = document.getElementById('crafting-body');
+        tbody.innerHTML = ''; // Clear
+
+        profits.forEach(row => {
+          if (!Array.isArray(row)) return; // Defensive
+
+          const tr = document.createElement('tr');
+          row.forEach(cell => {
+            const td = document.createElement('td');
+            td.textContent = cell;
+            td.className = 'border border-gray-700 px-2 py-1';
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById('crafting-status').innerText = `Showing ${profits.length} results.`;
+
+        // Init DataTables
+        $('#profitsTable').DataTable({
+          paging: true,
+          searching: false,
+          info: false
+        });
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        document.getElementById('crafting-status').innerText = '❌ Failed to load crafting profits';
+      }
+    }
+
+    // Filter table with custom input
+    $(document).on('input', '#tableSearch', function () {
+      $('#profitsTable').DataTable().search(this.value).draw();
+    });
+
+    document.addEventListener('DOMContentLoaded', loadCraftingProfits);
+  </script>
 </body>
 </html>
