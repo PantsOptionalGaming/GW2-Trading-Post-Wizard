@@ -123,6 +123,10 @@ function setActive(id) {
 
 function toggleChart(show) {
   const chartContainer = document.getElementById("chart-container");
+  if (!chartContainer) {
+    console.warn("Chart container not found.");
+    return;
+  }
   chartContainer.style.display = show ? "block" : "none";
 }
 
