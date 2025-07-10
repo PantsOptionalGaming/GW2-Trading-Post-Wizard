@@ -1,42 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GW2 Trading Post Baron</title>
-    <link rel="stylesheet" href="assets/css/tailwind.min.css" />
-    <link rel="icon" href="data:," /> <!-- Prevents favicon 404 -->
-  </head>
-  <body class="bg-gray-900 text-white min-h-screen p-6">
-    <div class="max-w-5xl mx-auto">
-      <h1 class="text-4xl font-bold text-yellow-400 mb-2">GW2 Trading Post Baron</h1>
-      <p class="text-yellow-200 mb-4 italic text-sm">
-        Data updates every 5 minutes using live API and Google Sheets.
-      </p>
-      <p id="last-updated" class="text-yellow-300 mb-6 text-sm"></p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GW2 Trading Post Baron</title>
 
-      <div class="mb-8">
-        <h2 class="text-2xl font-semibold text-yellow-300 mb-2">Top Crafting Profits</h2>
-        <table class="table-auto w-full bg-gray-800 text-white rounded overflow-hidden shadow">
-          <thead class="bg-gray-700 text-yellow-300 text-left">
-            <tr>
-              <th class="p-2">Recipe Name</th>
-              <th class="p-2">Ingredients</th>
-              <th class="p-2">Cost</th>
-              <th class="p-2">Profit</th>
-            </tr>
-          </thead>
-          <tbody id="crafting-body">
-            <!-- Populated by JS -->
-          </tbody>
-        </table>
-      </div>
+  <!-- ✅ Load Tailwind from CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/custom.css" />
+  <link rel="icon" type="image/png" href="assets/img/favicon.ico" />
+</head>
+<body class="bg-gray-900 text-white min-h-screen p-6">
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-4xl font-bold text-yellow-400 mb-2">GW2 Trading Post Baron</h1>
+    <p class="text-yellow-200 mb-4 italic text-sm">
+      Data updates every 5 minutes using live API and Google Sheets.
+    </p>
+    <p id="last-updated" class="text-yellow-300 mb-6 text-sm"></p>
 
-      <footer class="text-center text-gray-400 text-xs mt-12">
-        © 2025 GW2 Trading Post Wizard | Powered by Google Sheets & Apps Script
-      </footer>
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold text-yellow-300 mb-2">Top Crafting Profits</h2>
+      <div id="loading" class="text-gray-400 italic mb-4">Loading data...</div>
+      <table class="table-auto w-full bg-gray-800 text-white rounded overflow-hidden shadow">
+        <thead class="bg-gray-700 text-yellow-300 text-left">
+          <tr>
+            <th class="p-2">Recipe Name</th>
+            <th class="p-2">Ingredients</th>
+            <th class="p-2">Cost</th>
+            <th class="p-2">Profit</th>
+          </tr>
+        </thead>
+        <tbody id="crafting-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
     </div>
 
-    <script src="assets/js/app.js"></script>
-  </body>
+    <footer class="text-center text-gray-400 text-xs mt-12">
+      © 2025 GW2 Trading Post Wizard | Powered by Google Sheets & Apps Script
+    </footer>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+</body>
 </html>
