@@ -1,46 +1,59 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GW2 Trading Post Baron</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GW2 Trading Post Wizard</title>
 
-  <!-- ✅ Load Tailwind from CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/custom.css" />
-  <link rel="icon" type="image/png" href="assets/img/favicon.ico" />
-</head>
-<body class="bg-gray-900 text-white min-h-screen p-6">
-  <div class="max-w-5xl mx-auto">
-    <h1 class="text-4xl font-bold text-yellow-400 mb-2">GW2 Trading Post Baron</h1>
-    <p class="text-yellow-200 mb-4 italic text-sm">
-      Data updates every 5 minutes using live API and Google Sheets.
-    </p>
-    <p id="last-updated" class="text-yellow-300 mb-6 text-sm"></p>
+    <!-- TailwindCSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/custom.css" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.ico" />
 
-    <div class="mb-8">
-      <h2 class="text-2xl font-semibold text-yellow-300 mb-2">Top Crafting Profits</h2>
-      <div id="loading" class="text-gray-400 italic mb-4">Loading data...</div>
-      <table class="table-auto w-full bg-gray-800 text-white rounded overflow-hidden shadow">
-        <thead class="bg-gray-700 text-yellow-300 text-left">
-          <tr>
-            <th class="p-2">Recipe Name</th>
-            <th class="p-2">Ingredients</th>
-            <th class="p-2">Cost</th>
-            <th class="p-2">Profit</th>
-          </tr>
-        </thead>
-        <tbody id="crafting-body">
-          <!-- Populated by JS -->
-        </tbody>
-      </table>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body class="bg-gray-900 text-white min-h-screen p-6">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-4xl font-bold text-yellow-400 mb-2">GW2 Trading Post Baron</h1>
+      <p class="text-yellow-200 mb-4 italic text-sm">
+        Data updates every 5 minutes using live API and Google Sheets.
+      </p>
+      <p id="last-updated" class="text-yellow-300 mb-6 text-sm"></p>
+
+      <div class="mb-6 flex flex-wrap gap-4">
+        <button onclick="showCrafting()">Top Crafting Profits</button>
+        <button onclick="showFlips()">Items to Flip</button>
+        <button onclick="showWatchlist()">Items to Watch</button>
+      </div>
+
+      <!-- Table Output Area -->
+      <div id="table-area" class="mb-12">
+        <table class="table-auto w-full bg-gray-800 text-white rounded overflow-hidden shadow">
+          <thead class="bg-gray-700 text-yellow-300 text-left">
+            <tr>
+              <th class="p-2">Loading...</th>
+            </tr>
+          </thead>
+          <tbody id="data-body">
+            <!-- JS will populate -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Chart Output Area -->
+      <div id="chart-area" class="hidden">
+        <h2 class="text-2xl font-semibold text-yellow-300 mb-2">Item Price History</h2>
+        <canvas id="priceChart" class="bg-gray-800 p-4 rounded shadow"></canvas>
+      </div>
+
+      <footer class="text-center text-gray-400 text-xs mt-12">
+        © 2025 GW2 Trading Post Wizard | Powered by Google Sheets & Apps Script
+      </footer>
     </div>
 
-    <footer class="text-center text-gray-400 text-xs mt-12">
-      © 2025 GW2 Trading Post Wizard | Powered by Google Sheets & Apps Script
-    </footer>
-  </div>
-
-  <script src="assets/js/app.js"></script>
-</body>
+    <script src="assets/js/app.js"></script>
+  </body>
 </html>
