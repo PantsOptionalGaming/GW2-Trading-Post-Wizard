@@ -1,7 +1,6 @@
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxU4ks-i_jhldboVik3ruG9spBfOzlcOEbKEFuRGwjapJS4I7wvG-Ng0ugv5FHK9sg/exec";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Attach button events
   document.getElementById("btn-crafting").addEventListener("click", showCrafting);
   document.getElementById("btn-flipping").addEventListener("click", showFlipping);
   document.getElementById("btn-watchlist").addEventListener("click", showWatchlist);
@@ -18,9 +17,18 @@ function formatCopper(value) {
   return `${gold}g ${silver}s ${copper}c`;
 }
 
+function showLoading() {
+  const body = document.getElementById("crafting-body");
+  body.innerHTML = `
+    <tr><td colspan="4" class="text-center p-4 animate-pulse text-yellow-200">Loading...</td></tr>
+  `;
+}
+
+// --------------------- CRAFTING ---------------------
 async function showCrafting() {
   setActive("btn-crafting");
   toggleChart(false);
+  showLoading();
 
   try {
     const res = await fetch(SHEET_URL + "?sheet=CraftingProfits");
@@ -50,9 +58,11 @@ async function showCrafting() {
   }
 }
 
-async function showFlips() {
+// --------------------- FLIPPING ---------------------
+async function showFlipping() {
   setActive("btn-flipping");
   toggleChart(false);
+  showLoading();
 
   try {
     const res = await fetch(SHEET_URL + "?sheet=MostProfitable");
@@ -82,9 +92,11 @@ async function showFlips() {
   }
 }
 
+// --------------------- WATCHLIST ---------------------
 async function showWatchlist() {
   setActive("btn-watchlist");
   toggleChart(true);
+  showLoading();
 
   try {
     const res = await fetch(SHEET_URL + "?sheet=History");
@@ -92,7 +104,6 @@ async function showWatchlist() {
     const body = document.getElementById("crafting-body");
     body.innerHTML = "";
 
-    // Filter items with 10% price change flags
     const watchlist = data.filter((x) => x["+10%"] || x["-10%"]);
 
     watchlist.slice(0, 10).forEach((row) => {
@@ -107,7 +118,7 @@ async function showWatchlist() {
       `;
       body.appendChild(tr);
 
-      // Plot history (limited to one item for now)
+      // Show chart for the first item
       renderChart(row);
     });
 
@@ -117,6 +128,7 @@ async function showWatchlist() {
   }
 }
 
+// --------------------- UI HELPERS ---------------------
 function setActive(id) {
   ["btn-crafting", "btn-flipping", "btn-watchlist"].forEach((btn) => {
     document.getElementById(btn).classList.remove("bg-blue-500");
@@ -126,10 +138,7 @@ function setActive(id) {
 
 function toggleChart(show) {
   const chartContainer = document.getElementById("chart-container");
-  if (!chartContainer) {
-    console.warn("Chart container not found.");
-    return;
-  }
+  if (!chartContainer) return;
   chartContainer.style.display = show ? "block" : "none";
 }
 
@@ -138,7 +147,7 @@ function updateTimestamp() {
   if (el) el.innerText = "Last updated: " + new Date().toLocaleString();
 }
 
-// Chart.js rendering
+// --------------------- CHART ---------------------
 let chartInstance = null;
 function renderChart(itemRow) {
   const labels = [];
@@ -147,7 +156,7 @@ function renderChart(itemRow) {
   for (let i = 1; i <= 30; i++) {
     const col = itemRow[i.toString()];
     if (col) {
-      labels.push(i); // can use dates if added
+      labels.push(i); // ideally use actual dates
       prices.push(parseInt(col));
     }
   }
