@@ -55,6 +55,9 @@ async function showCrafting() {
     updateTimestamp();
   } catch (err) {
     console.error("Error loading crafting data:", err);
+    console.log("Fetching CraftingProfits from", SHEET_URL + "?sheet=CraftingProfits");    //Log for Testing
+    console.log("Received data:", data);      //Log for Testing
+
   }
 }
 
