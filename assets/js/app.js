@@ -1,21 +1,24 @@
-const SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbxU4ks-i_jhldboVik3ruG9spBfOzlcOEbKEFuRGwjapJS4I7wvG-Ng0ugv5FHK9sg/exec";
-
 async function loadCraftingProfits() {
   try {
     const res = await fetch(SHEET_URL + "?sheet=CraftingProfits");
     const data = await res.json();
 
+    const loading = document.getElementById("loading");
     const body = document.getElementById("crafting-body");
     if (!body) throw new Error("crafting-body element not found.");
 
-    // Clear any existing rows
+    // Hide loading spinner
+    if (loading) loading.style.display = "none";
+
     body.innerHTML = "";
 
-    // Sort by profit descending
-    data.sort((a, b) => b.Profit - a.Profit);
+    if (!data || data.length === 0) {
+      body.innerHTML = `<tr><td colspan="4" class="text-center text-gray-400 p-4">No data available.</td></tr>`;
+      return;
+    }
 
-    const topItems = data.slice(0, 10); // show top 10
+    data.sort((a, b) => b.Profit - a.Profit);
+    const topItems = data.slice(0, 10);
 
     topItems.forEach((row) => {
       const tr = document.createElement("tr");
@@ -33,20 +36,9 @@ async function loadCraftingProfits() {
 
     const timestamp = document.getElementById("last-updated");
     if (timestamp) {
-      timestamp.innerText =
-        "Last updated: " + new Date().toLocaleString();
+      timestamp.innerText = "Last updated: " + new Date().toLocaleString();
     }
   } catch (err) {
     console.error("Error fetching data:", err);
   }
 }
-
-function formatCopper(value) {
-  if (isNaN(value)) return "—";
-  const gold = Math.floor(value / 10000);
-  const silver = Math.floor((value % 10000) / 100);
-  const copper = value % 100;
-  return `${gold}g ${silver}s ${copper}c`;
-}
-
-document.addEventListener("DOMContentLoaded", loadCraftingProfits);
