@@ -1,10 +1,13 @@
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxU4ks-i_jhldboVik3ruG9spBfOzlcOEbKEFuRGwjapJS4I7wvG-Ng0ugv5FHK9sg/exec";
 
 document.addEventListener("DOMContentLoaded", () => {
-  showCrafting(); // default view
+  // Attach button events
   document.getElementById("btn-crafting").addEventListener("click", showCrafting);
-  document.getElementById("btn-flipping").addEventListener("click", showFlips);
+  document.getElementById("btn-flipping").addEventListener("click", showFlipping);
   document.getElementById("btn-watchlist").addEventListener("click", showWatchlist);
+
+  // Load default view
+  showCrafting();
 });
 
 function formatCopper(value) {
